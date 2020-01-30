@@ -3,11 +3,15 @@ package ru.progwards.java1.lessons.compare_if_cycles;
 public class CyclesGoldenFibo {
 
     public static boolean containsDigit(int number, int digit) {
+        int div = 10;
+        for (int i = 10; i < digit; i *=10) {
+            div *=10;
+        }
         while (number > 0) {
-            if (abs(number % 10) == abs(digit)) {
+            if (abs(number % div) == abs(digit)) {
                 return true;
             }
-            number /= 10;
+            number /= div;
         }
         return false;
     }
@@ -55,16 +59,7 @@ public class CyclesGoldenFibo {
                 }
             }
         }
-        System.out.println("containsDigit(123456,1) =" +containsDigit(123456,1));
-        System.out.println("containsDigit(123456,2) =" +containsDigit(123456,2));
-        System.out.println("containsDigit(123456,3) =" +containsDigit(123456,3));
-        System.out.println("containsDigit(123456,4) =" +containsDigit(123456,4));
-        System.out.println("containsDigit(123456,5) =" +containsDigit(123456,5));
-        System.out.println("containsDigit(123456,6) =" +containsDigit(123456,6));
-        System.out.println("containsDigit(123456,7) =" +containsDigit(123456,7));
-        System.out.println("containsDigit(123456,8) =" +containsDigit(123456,8));
-
-
-
+        System.out.println("containsDigit(123456,12) =" + containsDigit(123456,12));
+        System.out.println("containsDigit(123456,34) =" + containsDigit(123456,34));
     }
 }
