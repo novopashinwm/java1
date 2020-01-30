@@ -22,7 +22,10 @@ public class CyclesGoldenFibo {
             double min_side = (double) TriangleSimpleInfo.minSide(a, b, c);
             double max_side = (double) TriangleSimpleInfo.maxSide(a, b, c);
             double coeff = max_side / min_side;
-            return coeff > 1.61703 && coeff < 1.61903;
+            if ((a==max_side && b == max_side) || (a == max_side && c == max_side) ||
+                    (b == max_side && c == max_side)) {
+                return coeff > 1.61703 && coeff < 1.61903;
+            }
         }
         return false;
     }
