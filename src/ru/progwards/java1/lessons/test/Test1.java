@@ -24,4 +24,11 @@ public class Test1 {
         }
         return "не определено";
     }
+
+    static long factorial(long n) {
+        if (n == 0) {
+            return 1L;
+        }
+        return n * factorial(n-1);
+    }
 }
