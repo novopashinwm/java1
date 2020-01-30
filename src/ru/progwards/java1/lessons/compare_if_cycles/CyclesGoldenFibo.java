@@ -19,8 +19,8 @@ public class CyclesGoldenFibo {
 
     public static boolean isGoldenTriangle(int a, int b, int c) {
         if(TriangleInfo.isIsoscelesTriangle(a, b, c)) {
-            double min_side = TriangleSimpleInfo.minSide(a, b, c);
-            double max_side = TriangleSimpleInfo.maxSide(a, b, c);
+            double min_side = (double) TriangleSimpleInfo.minSide(a, b, c);
+            double max_side = (double) TriangleSimpleInfo.maxSide(a, b, c);
             double coeff = max_side / min_side;
             return coeff > 1.61703 && coeff < 1.61903;
         }
