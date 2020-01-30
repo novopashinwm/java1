@@ -7,7 +7,7 @@ public class CyclesGoldenFibo {
         for (int i = 10; i < digit; i *=10) {
             div *=10;
         }
-        while (number > 0) {
+        while (abs(number) > 0) {
             if (abs(number % div) == abs(digit)) {
                 return true;
             }
@@ -60,6 +60,6 @@ public class CyclesGoldenFibo {
             }
         }
         System.out.println("containsDigit(123456,12) =" + containsDigit(123456,12));
-        System.out.println("containsDigit(123456,34) =" + containsDigit(123456,34));
+        System.out.println("containsDigit(-123456,34) =" + containsDigit(-123456,34));
     }
 }
