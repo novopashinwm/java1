@@ -3,7 +3,18 @@ package ru.progwards.java1.lessons.compare_if_cycles;
 public class CyclesGoldenFibo {
 
     public static boolean containsDigit(int number, int digit) {
-        return Integer.toString(number).contains(Integer.toString(digit));
+        while (number > 0) {
+            if (abs(number % 10) == abs(digit)) {
+                return true;
+            }
+            number /= 10;
+        }
+        return false;
+    }
+    public static int abs( int number) {
+        if (number < 0)
+            return number * -1;
+        return number;
     }
     public static int fiboNumber(int n) {
         int a = 0;
@@ -44,6 +55,16 @@ public class CyclesGoldenFibo {
                 }
             }
         }
-        //System.out.println(isGoldenTriangle(23,23,59));
+        System.out.println("containsDigit(123456,1) =" +containsDigit(123456,1));
+        System.out.println("containsDigit(123456,2) =" +containsDigit(123456,2));
+        System.out.println("containsDigit(123456,3) =" +containsDigit(123456,3));
+        System.out.println("containsDigit(123456,4) =" +containsDigit(123456,4));
+        System.out.println("containsDigit(123456,5) =" +containsDigit(123456,5));
+        System.out.println("containsDigit(123456,6) =" +containsDigit(123456,6));
+        System.out.println("containsDigit(123456,7) =" +containsDigit(123456,7));
+        System.out.println("containsDigit(123456,8) =" +containsDigit(123456,8));
+
+
+
     }
 }
