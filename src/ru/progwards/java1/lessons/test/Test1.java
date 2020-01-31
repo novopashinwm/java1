@@ -4,6 +4,14 @@ public class Test1 {
     public static void main(String[] args) {
         System.out.println("Сделаю коммит, запушу в репо: робот, проверяй теперь всё это...");
     }
+
+    public int sumArrayItems(int[] a) {
+        int sum = 0 ;
+        for (int i = 0; i < a.length; i++) {
+            sum += a[i];
+        }
+        return sum;
+    }
     static int addAsStrings(int n1, int n2) {
         return Integer.parseInt(Integer.toString(n1) + Integer.toString(n2));
     }
