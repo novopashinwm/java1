@@ -47,7 +47,7 @@ public class DIntArray {
     }
 
     private boolean checkBound(int pos) {
-        return (a!=null && pos < a.length-1);
+        return (a!=null && pos < a.length);
     }
 
     public int at(int pos) {
@@ -66,9 +66,26 @@ public class DIntArray {
     public static void main(String[] args) {
         DIntArray da = new DIntArray();
         System.out.println(da);
-        da.add(1);
-        da.add(2);
-        da.add(3);
+        da.add(52);
+        da.add(21);
+        da.add(87);
+        da.add(20);
+        da.add(-30);
+        da.add(33);
+        da.add(42);
+        da.add(-70);
+        da.add(97);
+        da.add(49);
+        da.add(-57);
+        da.add(-28);
+        da.add(-92);
+        da.add(-15);
+        da.add(94);
+        da.add(-91);
+        da.add(-51);
+        da.add(-47);
+        da.add(79);
+        System.out.println(da.at(18));
         System.out.println(da);
         da.atInsert(1,4);
         System.out.println(da);
