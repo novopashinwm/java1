@@ -39,7 +39,7 @@ public class DIntArray {
             b = new int[a.length];
             b = Arrays.copyOf(a, a.length);
             a = new int[a.length - 1];
-            a = Arrays.copyOf(b, pos -1);
+            System.arraycopy(b, 0, a, 0, pos -1);
             for (int i = pos + 1; i < b.length; i++) {
                 a[i-1] = b[i];
             }
