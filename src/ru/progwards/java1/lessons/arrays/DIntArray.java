@@ -40,8 +40,11 @@ public class DIntArray {
             b = Arrays.copyOf(a, a.length);
             a = new int[a.length - 1];
             System.arraycopy(b, 0, a, 0, pos -1);
-            for (int i = pos + 1; i < b.length; i++) {
+            for (int i = pos +1; i < b.length; i++) {
                 a[i-1] = b[i];
+            }
+            if (pos == b.length -1) {
+                a[a.length - 1] = b[b.length - 2];
             }
         }
     }
@@ -85,9 +88,7 @@ public class DIntArray {
         da.add(-51);
         da.add(-47);
         da.add(79);
-        System.out.println(da.at(18));
-        System.out.println(da);
-        da.atInsert(1,4);
+        da.atDelete(18);
         System.out.println(da);
     }
 }
