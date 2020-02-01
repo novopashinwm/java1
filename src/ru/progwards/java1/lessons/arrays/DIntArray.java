@@ -22,15 +22,19 @@ public class DIntArray {
 
     public void atInsert(int pos, int num) {
         if (checkBound(pos)) {
-            b = new int[a.length + 1];
-            System.arraycopy(a,0, b,0, a.length);
-            //Не придумал как стандартными функциями обойтись
-            for (int i = pos + 1; i < b.length ; i++) {
-                b[i] = a[i-1];
+            if (pos < a.length) {
+                b = new int[a.length + 1];
+                System.arraycopy(a, 0, b, 0, a.length);
+                //Не придумал как стандартными функциями обойтись
+                for (int i = pos + 1; i < b.length; i++) {
+                    b[i] = a[i - 1];
+                }
+                b[pos] = num;
+                a = new int[a.length + 1];
+                a = Arrays.copyOf(b, b.length);
+            } else if (a.length == pos && a.length == 1) {
+                a = null;
             }
-            b[pos] = num;
-            a = new int[a.length + 1];
-            a = Arrays.copyOf(b, b.length);
         }
     }
 
