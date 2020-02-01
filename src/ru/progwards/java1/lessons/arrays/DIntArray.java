@@ -65,6 +65,7 @@ public class DIntArray {
 
     public static void main(String[] args) {
         DIntArray da = new DIntArray();
+        System.out.println(da);
         da.add(1);
         da.add(2);
         da.add(3);
