@@ -14,7 +14,10 @@ public class Eratosthenes {
     }
 
     private void sift() {
-        for (int i = 2; i <  N; i++) {
+        for (int i = 2; i <  N / 2; i++) {
+            if (!sieve[i]) {
+                continue;
+            }
             for (int j = i*2;  j <N; j +=i ) {
                 sieve[j] = false;
             }
