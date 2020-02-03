@@ -5,10 +5,10 @@ import java.util.Arrays;
 public class ArraySort {
 
     public static void sort(int[] a) {
-        for (int i = a.length - 1; i >= 1; i--){
-            for (int j = 0; j < i; j++){
-                if(a[j] > a[j + 1]) {
-                    swap(a, j, j + 1);
+        for (int i = 0; i < a.length ; i++) {
+            for (int j = i+1; j < a.length; j++) {
+                if (a[i] > a[j]) {
+                    swap(a, i, j);
                 }
             }
         }
