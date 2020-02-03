@@ -7,6 +7,17 @@ public class Test1 {
         System.out.println("Сделаю коммит, запушу в репо: робот, проверяй теперь всё это...");
     }
 
+    static Grade intToGrade(int grade) {
+        switch (grade) {
+            case 1: return Grade.VERYBAD;
+            case 2: return Grade.BAD;
+            case 3: return Grade.SATISFACTORILY;
+            case 4: return Grade.GOOD;
+            case 5: return Grade.EXCELLENT;
+            default: return Grade.NOTDEFINED;
+        }
+    }
+
     public int arrayMax(int[] a) {
         if (a.length == 0) {
             return 0;
