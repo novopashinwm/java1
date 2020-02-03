@@ -25,10 +25,7 @@ public class DIntArray {
             if (pos < a.length) {
                 b = new int[a.length + 1];
                 System.arraycopy(a, 0, b, 0, a.length);
-                //Не придумал как стандартными функциями обойтись
-                for (int i = pos + 1; i < b.length; i++) {
-                    b[i] = a[i - 1];
-                }
+                System.arraycopy(a,pos,b, pos + 1, b.length - pos - 1);
                 b[pos] = num;
                 a = new int[a.length + 1];
                 a = Arrays.copyOf(b, b.length);
@@ -72,6 +69,12 @@ public class DIntArray {
 
     public static void main(String[] args) {
         DIntArray da = new DIntArray();
+        da.add(1);
+        da.add(2);
+        da.add(3);
+        System.out.println(da);
+        da.atInsert(2,4);
+
         System.out.println(da);
         da.add(52);
         da.add(21);
