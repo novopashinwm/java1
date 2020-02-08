@@ -17,13 +17,9 @@ public class Binary {
     public String toString() {
         String value = "";
         for (int i=0; i<8; i++) {
-            value += (num & 1);
+            value = (num & 1) +  value;
             num = (byte)(( num & 0xFF) >> 1);
         }
-        String ret = "";
-        for (int i = 8; i >=1 ; i--) {
-            ret += value.substring(i-1,i);
-        }
-        return ret;
+        return value;
     }
 }
