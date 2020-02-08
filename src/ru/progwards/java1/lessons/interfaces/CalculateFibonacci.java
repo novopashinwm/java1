@@ -4,6 +4,10 @@ public class CalculateFibonacci {
     private static CacheInfo lastFibo;
 
     public static int fiboNumber(int n) {
+        if (CalculateFibonacci.lastFibo==null) {
+            CalculateFibonacci.lastFibo = new CacheInfo();
+        }
+
         if (n == getLastFibo().n) {
             return getLastFibo().fibo;
         }
@@ -24,9 +28,6 @@ public class CalculateFibonacci {
     }
 
     public static CacheInfo getLastFibo() {
-        if (CalculateFibonacci.lastFibo==null) {
-            CalculateFibonacci.lastFibo = new CacheInfo();
-        }
         return lastFibo;
     }
 
