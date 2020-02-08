@@ -20,12 +20,12 @@ public class CalculateFibonacci {
         return c;
     }
     public static void clearLastFibo() {
-        lastFibo = null;
+        CalculateFibonacci.lastFibo = null;
     }
 
     public static CacheInfo getLastFibo() {
-        if (lastFibo==null) {
-            lastFibo = new CacheInfo();
+        if (CalculateFibonacci.lastFibo==null) {
+            CalculateFibonacci.lastFibo = new CacheInfo();
         }
         return lastFibo;
     }
