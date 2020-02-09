@@ -1,7 +1,7 @@
 package ru.progwards.java1.lessons.test;
 
 public class Person {
-    private String name;
+    public String name;
     private int age;
     private String country;
 
