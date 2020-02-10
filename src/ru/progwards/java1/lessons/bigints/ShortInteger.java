@@ -8,11 +8,8 @@ public class ShortInteger extends AbsInteger {
 
     @Override
     public String toString() {
-        return "ShortInteger{" +
-                "num=" + num +
-                '}';
+        return Short.toString((short)this.num);
     }
-
 
     @Override
     public Number getNum() {

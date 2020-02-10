@@ -8,9 +8,7 @@ public class IntInteger extends AbsInteger {
 
     @Override
     public String toString() {
-        return "IntInteger{" +
-                "num=" + num +
-                '}';
+        return Integer.toString((int)this.num);
     }
 
     @Override
