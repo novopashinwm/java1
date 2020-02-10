@@ -31,21 +31,27 @@ public class ArrayInteger {
             return false;
         }
         int min = Math.min(num.digits.length, this.digits.length);
-        byte a, b ,s = 0 , z = 0;
+
         for (int i = 0; i < min; i++) {
-            a = this.digits[i];
-            b = num.digits[i];
-            s = (byte) (a + b);
-            if (z !=0 ) {
-                s += z;
-                z = 0;
-            }
-            if (s >=10) {
-                z = (byte) (s / 10);
-            }
-            this.digits[i] = (byte) (s % 10);
+           this.digits[i] += num.digits[i];
+           if (this.digits[i] > 9) {
+               this.digits[i] = (byte) ( this.digits[i] - 10);
+               if ((i+1)<= this.digits.length-1) {
+                   this.digits[i+1]++;
+               }
+           }
         }
-        if (z > 0 || s >= 10) {
+        if (this.digits[min-1]>9) {
+            int i = min-1;
+            if (this.digits[i] > 9) {
+                this.digits[i] = (byte) (this.digits[i]-10);
+                if ((i+1)<= this.digits.length-1) {
+                    this.digits[i+1]++;
+                }
+            }
+
+        }
+        if (this.digits[this.digits.length-1]>9) {
             for (int i = 0; i < this.digits.length; i++) {
                 this.digits[i] = 0;
             }
@@ -56,11 +62,12 @@ public class ArrayInteger {
     }
 
     public static void main(String[] args) {
-        ArrayInteger ai = new ArrayInteger(2);
-        ai.fromInt(new BigInteger("99"));
-        System.out.println(ai.toInt());
-        ArrayInteger ai1 = new ArrayInteger(1);
-        ai1.fromInt(new BigInteger("1"));
-        System.out.println(ai.add(ai1));
+        ArrayInteger ai1 = new ArrayInteger(8);
+        ai1.fromInt(new BigInteger("10287074"));
+        ArrayInteger ai2 = new ArrayInteger(5);
+        ai2.fromInt(new BigInteger("87957"));
+        ai1.add(ai2);
+        System.out.println(ai1.toInt());
+
     }
 }
