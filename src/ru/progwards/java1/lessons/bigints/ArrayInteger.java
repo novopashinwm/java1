@@ -41,15 +41,17 @@ public class ArrayInteger {
                }
            }
         }
-        if (this.digits[min-1]>9) {
-            int i = min-1;
-            if (this.digits[i] > 9) {
-                this.digits[i] = (byte) (this.digits[i]-10);
-                if ((i+1)<= this.digits.length-1) {
-                    this.digits[i+1]++;
+        if (this.digits[min]>9) {
+            int i = min;
+            while (i < this.digits.length) {
+                if (this.digits[i] > 9) {
+                    this.digits[i] = (byte) (this.digits[i] - 10);
+                    if ((i + 1) <= this.digits.length - 1) {
+                        this.digits[i + 1]++;
+                    }
                 }
+                i++;
             }
-
         }
         if (this.digits[this.digits.length-1]>9) {
             for (int i = 0; i < this.digits.length; i++) {
@@ -63,9 +65,9 @@ public class ArrayInteger {
 
     public static void main(String[] args) {
         ArrayInteger ai1 = new ArrayInteger(8);
-        ai1.fromInt(new BigInteger("10287074"));
+        ai1.fromInt(new BigInteger("14983308"));
         ArrayInteger ai2 = new ArrayInteger(5);
-        ai2.fromInt(new BigInteger("87957"));
+        ai2.fromInt(new BigInteger("19782"));
         ai1.add(ai2);
         System.out.println(ai1.toInt());
 
