@@ -1,7 +1,5 @@
 package ru.progwards.java1.lessons.bigints;
 
-import javafx.scene.chart.BubbleChart;
-
 import java.math.BigInteger;
 
 public class ArrayInteger {
