@@ -11,6 +11,16 @@ public class Test1 {
                 return p1.name.compareTo(p2.name);
             }
         };
+        System.out.println();
+    }
+
+    public Integer sqr(Integer n) {
+        try {
+            return n.intValue() * n.intValue();
+        }
+        catch (NullPointerException e) {
+            return -1;
+        }
     }
 
 static Grade intToGrade(int grade) {

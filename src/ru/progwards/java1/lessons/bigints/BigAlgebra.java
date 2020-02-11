@@ -5,7 +5,7 @@ import java.math.BigInteger;
 
 public class BigAlgebra {
 
-    BigDecimal fastPow(BigDecimal num, int pow) {
+    public static BigDecimal  fastPow(BigDecimal num, int pow) {
         if (pow == 0) {
             return BigDecimal.ONE;
         }
@@ -15,7 +15,7 @@ public class BigAlgebra {
         return num.multiply(num);
     }
 
-    BigInteger fibonacci(int n) {
+    public static BigInteger fibonacci(int n) {
         BigInteger a = BigInteger.ZERO;
         BigInteger b = BigInteger.ONE;
         BigInteger x = BigInteger.ZERO;
