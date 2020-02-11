@@ -4,9 +4,11 @@ import java.math.BigInteger;
 
 public class ArrayInteger {
     byte[] digits;
+    private int n;
 
     public ArrayInteger(int n) {
         digits = new byte[n];
+        this.n = n;
     }
 
 
@@ -54,9 +56,7 @@ public class ArrayInteger {
             }
         }
         if (this.digits[this.digits.length-1]>9) {
-            for (int i = 0; i < this.digits.length; i++) {
-                this.digits[i] = 0;
-            }
+            this.digits = new byte[n];
             return false;
         }
 
@@ -69,6 +69,8 @@ public class ArrayInteger {
         ArrayInteger ai2 = new ArrayInteger(5);
         ai2.fromInt(new BigInteger("19782"));
         ai1.add(ai2);
+        ai2.fromInt(new BigInteger("000000012345"));
+        System.out.println(ai2.toInt());
         System.out.println(ai1.toInt());
 
     }
