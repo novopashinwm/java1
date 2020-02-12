@@ -1,10 +1,12 @@
 package ru.progwards.java1.lessons.test;
 
+import java.io.*;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Test1 {
     public static void main(String[] args) {
-        System.out.println("Сделаю коммит, запушу в репо: робот, проверяй теперь всё это...");
+        /*System.out.println("Сделаю коммит, запушу в репо: робот, проверяй теперь всё это...");
         PersonCompare personCompare = new PersonCompare() {
             @Override
             public int compare(Person p1, Person p2) {
@@ -12,6 +14,23 @@ public class Test1 {
             }
         };
         System.out.println();
+        Test1 t = new Test1();
+        String[] content = new String[] {"01","02", "03"};
+        try {
+            FileWriter fw = new FileWriter("test01.txt");
+            for (int i = 0; i < content.length; i++) {
+                fw.write(content[i] + "\n");
+            }
+            fw.close();
+        } catch (IOException e) {
+
+        }*/
+        Test1 t = new Test1();
+        try {
+
+            System.out.println(t.lineCount("test01.txt"));
+        } catch (IOException e) {}
+
     }
 
     public Integer sqr(Integer n) {
@@ -75,5 +94,32 @@ static Grade intToGrade(int grade) {
             return 1L;
         }
         return n * factorial(n-1);
+    }
+
+    public String test(String filename) throws IOException {
+        if (filename == null) {
+            throw new IOException("File not found");
+        }
+        return "File processing";
+    }
+
+    private int lineCount(String filename) throws IOException {
+        try {
+            FileReader  fileReader = new FileReader(filename);
+            Scanner scanner = new Scanner(fileReader);
+            int cnt = 0;
+            try {
+               while (scanner.hasNext()) {
+                   cnt++;
+                   scanner.nextLine();
+               }
+            } finally {
+                fileReader.close();
+
+            }
+            return cnt;
+        } catch (IOException e) {
+            throw new IOException("файл не найден");
+        }
     }
 }
