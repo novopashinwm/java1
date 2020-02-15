@@ -15,8 +15,9 @@ public class Coder {
             String lineWrite = "";
             try {
                 while (scanner.hasNext()) {
-                    lineRead = scanner.next();
+                    lineRead += scanner.next();
                 }
+
                 for (int i = 0; i < code.length; i++) {
                     lineWrite += code[(int)lineRead.charAt(i)];
                 }
