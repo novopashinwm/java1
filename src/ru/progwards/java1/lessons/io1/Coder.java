@@ -14,13 +14,13 @@ public class Coder {
             String lineRead = "";
             String lineWrite = "";
             try {
-                while (scanner.hasNextLine()) {
-                    lineRead = scanner.nextLine();
-                    for (int i = 0; i < code.length; i++) {
-                        lineWrite += code[(int)lineRead.charAt(i)];
-                    }
-                    fileWriter.write(lineWrite);
+                while (scanner.hasNext()) {
+                    lineRead = scanner.next();
                 }
+                for (int i = 0; i < code.length; i++) {
+                    lineWrite += code[(int)lineRead.charAt(i)];
+                }
+                fileWriter.write(lineWrite);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             } finally {
