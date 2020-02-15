@@ -15,14 +15,14 @@ public class CharFilter {
 
             try {
                 Scanner scanner = new Scanner(fileReader);
-                while (scanner.hasNextLine()) {
-                    lineRead = scanner.nextLine();
-                    lineWrite = lineRead;
-                    for (int i = 0; i < filter.length(); i++) {
-                        lineWrite = lineWrite.replace(Character.toString(filter.charAt(i)),"");
-                    }
-                    fileWriter.write(lineWrite);
+                while (scanner.hasNext()) {
+                    lineRead = scanner.next();
+                    lineWrite += lineRead;
                 }
+                for (int i = 0; i < filter.length(); i++) {
+                    lineWrite = lineWrite.replace(Character.toString(filter.charAt(i)),"");
+                }
+                fileWriter.write(lineWrite);
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
