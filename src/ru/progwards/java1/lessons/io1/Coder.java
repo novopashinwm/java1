@@ -19,7 +19,7 @@ public class Coder {
             List<Character> list = new ArrayList<>();
             try {
                 while (scanner.hasNext()) {
-                    lineRead += scanner.nextLine() + "\n";
+                    lineRead += scanner.nextLine();
                 }
                 lineWrite = lineRead;
                 for (int i = 0; i < 255; i++) {
