@@ -3,10 +3,6 @@ package ru.progwards.java1.lessons.io1;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 
 public class Coder {
     public static void codeFile(String inFileName, String outFileName, char[] code, String logName) {
@@ -16,18 +12,27 @@ public class Coder {
 
             StringBuilder sb = new StringBuilder();
             try {
-                for (int a; (a= fileReader.read())!=-1;) {
-                    sb.append(code[a]);
+                int symbol = fileReader.read();
+                while (symbol != -1) {
+                    fileWriter.write(code[symbol]);
+                    symbol = fileReader.read();
                 }
-                fileWriter.write(sb.toString());
             } catch (Exception e) {
-                logName = e.getMessage();
+                FileWriter logFile = new FileWriter(logName);
+                logFile.write(e.getMessage());
+                logFile.close();
             } finally {
                 fileReader.close();
                 fileWriter.close();
             }
         } catch (IOException e) {
-            logName = e.getMessage();
+            try {
+                FileWriter logFile2 = new FileWriter(logName);
+                logFile2.write(e.getMessage());
+                logFile2.close();
+            } catch (IOException e1) {
+                System.out.println(e1.getMessage());
+            }
         }
     }
 
@@ -38,6 +43,6 @@ public class Coder {
         }
         arr[13] = 32;
         arr[32] = 13;
-        Coder.codeFile("test01.txt", "test03.txt",arr, "");
+        Coder.codeFile("test01.txt", "test03.txt",arr, "log_name");
     }
 }
