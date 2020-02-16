@@ -13,21 +13,13 @@ public class Coder {
         try {
             FileReader fileReader = new FileReader(inFileName);
             FileWriter fileWriter = new FileWriter(outFileName);
-            Scanner scanner = new Scanner(fileReader);
-            String lineRead = "";
-            String lineWrite = "";
-            List<Character> list = new ArrayList<>();
-            try {
-                while (scanner.hasNext()) {
-                    lineRead += scanner.nextLine();
-                }
-                lineWrite = lineRead;
-                for (int i = 0; i < 255; i++) {
-                    lineWrite = lineWrite.replace((char) i, code[i]);
-                }
 
-                System.out.println(Arrays.toString( list.toArray()));
-                fileWriter.write(lineWrite);
+            StringBuilder sb = new StringBuilder();
+            try {
+                for (int a; (a= fileReader.read())!=-1;) {
+                    sb.append(code[a]);
+                }
+                fileWriter.write(sb.toString());
             } catch (Exception e) {
                 logName = e.getMessage();
             } finally {
