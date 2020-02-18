@@ -13,6 +13,7 @@ public class Translator {
         StringBuilder sb = new StringBuilder();
         String[] words = sentence.split(" ");
         for (int i = 0; i < words.length; i++) {
+            boolean isExists = false;
             for (int j = 0; j < inLang.length; j++) {
                 if (words[i].toLowerCase().contains(inLang[j])) {
                     String out_word = "";
@@ -26,15 +27,21 @@ public class Translator {
                     if (i != words.length-1) {
                         sb.append(" ");
                     }
+                    isExists = true;
                 }
+            }
+            if (!isExists) {
+                sb.append(words[i]);
+                sb.append(" ");
             }
         }
         return sb.toString();
     }
 
     public static void main(String[] args) {
-        Translator translator = new Translator(new String[] {"hello", "world"}, new String[] {"привет", "мир" });
-        System.out.println(translator.translate("Hello world!"));
+        Translator translator = new Translator(new String[] {"make", "love", "not", "war"}
+        , new String[] {"твори", "любовь", "не", "войну" });
+        System.out.println(translator.translate("Not war - love make!"));
 
     }
 }
