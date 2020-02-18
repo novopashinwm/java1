@@ -30,9 +30,7 @@ public class Censor {
             while (scanner.hasNextLine()) {
                 sb.append(scanner.nextLine());
             }
-        } catch (FileNotFoundException e) {
-            throw new CensorException(inoutFileName,e.getMessage());
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new CensorException(inoutFileName,e.getMessage());
         }
         String read = sb.toString();
@@ -43,7 +41,7 @@ public class Censor {
         }
         try (FileWriter fileWriter = new FileWriter(inoutFileName)) {
             fileWriter.write(read);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new CensorException(e.getMessage(), inoutFileName);
         }
 
