@@ -11,13 +11,24 @@ public class ByteRegister {
     }
 
     public ByteRegister(byte value) {
+        int size = 7;
+        if (value < 0) {
+            arr[size] = new Bit(true);
+            value &= 0x7F;
+            size--;
+        }
+
+        for (int i=0; i<=size; i++) {
+            arr[i] = new Bit((value & 1)==1);
+            value >>= 1;
+        }
 
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < arr.length; i++) {
+        for (int i=arr.length-1; i>=0; i--) {
             sb.append(arr[i]);
         }
         return sb.toString();
@@ -25,13 +36,17 @@ public class ByteRegister {
 
     public String toDecString() {
         int ret = 0;
-        int p = 1;
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i].equals("1")) {
+        for (int i = 0, p =1 ; i < arr.length; i++, p *=2) {
+            if (arr[i].equals(new Bit(true))) {
                 ret += p;
             }
-            p *= 2;
         }
         return Integer.toString(ret);
+    }
+
+    public static void main(String[] args) {
+        ByteRegister b = new ByteRegister((byte)17);
+        System.out.println(b);
+        System.out.println(b.toDecString());
     }
 }
