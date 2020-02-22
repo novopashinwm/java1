@@ -1,15 +1,60 @@
 package ru.progwards.java1.lessons.test;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Scanner;
+import java.util.*;
 
 public class Test2 {
     public static void main(String[] args) {
-        Test2 t = new Test2();
-        System.out.println(t.setStars("test05.txt"));
+        List<Integer> linkedList = new LinkedList();
+        for (int i = 0; i < 5; i++)
+            linkedList.add(i);
+        for (ListIterator<Integer> listIterator = linkedList.listIterator(); listIterator.hasNext(); ) {
+            Integer n = listIterator.next();
+            if (n % 2 != 0)
+                listIterator.remove();
+            else
+                listIterator.add(n * 2);
+        }
+        for (ListIterator<Integer> listIterator = linkedList.listIterator(); listIterator.hasNext(); ) {
+            Integer n = listIterator.next();
+            if (n % 2 != 0)
+                listIterator.set(n * 2);
+        }
+    }
+
+    public void iterator3(ListIterator<Integer> iterator) {
+        for (;iterator.hasNext();) {
+            Integer next = iterator.next();
+            if (next % 3 == 0) {
+                iterator.set(iterator.previousIndex());
+            }
+        }
+    }
+
+
+    public List<Integer> filter(List<Integer> list) {
+        int sum = 0;
+        List<Integer> remove = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            sum += list.get(i);
+        }
+        int p = sum/100;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).intValue()>=p) {
+                remove.add(list.get(i));
+            }
+        }
+        list.removeAll(remove);
+        return list;
+    }
+
+    public List<Integer> listAction(List<Integer> list) {
+        list.remove(Collections.min(list));
+        list.add(0,list.size());
+        list.add(2, Collections.max(list));
+        return list;
     }
 
     public String setStars(String filename) {
