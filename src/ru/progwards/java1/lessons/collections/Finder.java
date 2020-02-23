@@ -46,14 +46,13 @@ public class Finder {
             arrNum[i] = (int)arr[i];
         }
 
+        List<Integer> list = new ArrayList<>();
         for (int i = 1; i < arrNum.length -1 ; i++) {
             if (arrNum[i-1] < arrNum[i] && arrNum[i] > arrNum[i+1] ) {
                 max = Math.max(max, arrNum[i]);
+                list.add(arrNum[i]);
             }
         }
-
-        List<Integer> list = new ArrayList<>();
-        list.add(max);
         return list;
     }
 

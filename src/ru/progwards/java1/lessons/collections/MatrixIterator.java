@@ -30,7 +30,7 @@ public class MatrixIterator<T> implements Iterator<T> {
     public static void main(String[] args) {
         Integer[][] arr = new Integer[][] { {1,2,3,4,5}
                                   , {6,7,8,9,0}};
-        MatrixIterator<Integer> matrix = new MatrixIterator<Integer>(arr);
+        MatrixIterator<Integer> matrix = new MatrixIterator<>(arr);
 
         for ( ; matrix.hasNext() ; ) {
             System.out.println(matrix.next());
