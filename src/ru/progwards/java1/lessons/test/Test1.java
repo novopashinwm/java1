@@ -1,36 +1,24 @@
 package ru.progwards.java1.lessons.test;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public class Test1 {
     public static void main(String[] args) {
-        /*System.out.println("Сделаю коммит, запушу в репо: робот, проверяй теперь всё это...");
-        PersonCompare personCompare = new PersonCompare() {
-            @Override
-            public int compare(Person p1, Person p2) {
-                return p1.name.compareTo(p2.name);
-            }
-        };
-        System.out.println();
-        Test1 t = new Test1();
-        String[] content = new String[] {"01","02", "03"};
-        try {
-            FileWriter fw = new FileWriter("test01.txt");
-            for (int i = 0; i < content.length; i++) {
-                fw.write(content[i] + "\n");
-            }
-            fw.close();
-        } catch (IOException e) {
+        List<Integer> linkedList = new LinkedList();
+        for (int i = 0; i < 5; i++)
+            linkedList.add(i);
 
-        }*/
-        Test1 t = new Test1();
-        try {
 
-            System.out.println(t.lineCount("test01.txt"));
-        } catch (IOException e) {}
 
+        for (ListIterator<Integer> listIterator = linkedList.listIterator(); listIterator.hasNext(); ) {
+            Integer n = listIterator.next();
+            if (n % 2 != 0)
+                listIterator.remove();
+            else
+                listIterator.add(n * 2);
+        }
+        System.out.println(linkedList);
     }
 
     public Integer sqr(Integer n) {
