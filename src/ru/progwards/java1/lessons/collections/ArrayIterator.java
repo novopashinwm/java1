@@ -16,7 +16,7 @@ public class ArrayIterator<T> implements Iterator<T> {
     @Override
     public boolean hasNext() {
         // TODO Auto-generated method stub
-        return index < length;
+        return (index + 1) < length;
     }
 
     @Override
