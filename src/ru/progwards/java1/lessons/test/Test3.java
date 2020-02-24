@@ -1,5 +1,9 @@
 package ru.progwards.java1.lessons.test;
 
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
+
 public class Test3 {
     public static void main(String[] args) {
 
@@ -13,6 +17,25 @@ public class Test3 {
             return  "Диаметр круга " + ((Round) fig).diameter;
         }
         return  "Неизвестная фигура";
+    }
+
+    public TreeSet<User> createSet() {
+        TreeSet<User> set = new TreeSet<>(new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                return Integer.compare(o2.id, o1.id);
+            }
+        });
+        return set;
+    }
+
+    class User {
+        public Integer id;
+        public String name;
+        User (Integer id, String name) {
+            this.id = id;
+            this.name = name;
+        }
     }
 
     class Figure {
