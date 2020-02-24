@@ -5,20 +5,26 @@ import java.util.*;
 
 public class Test1 {
     public static void main(String[] args) {
-        List<Integer> linkedList = new LinkedList();
-        for (int i = 0; i < 5; i++)
-            linkedList.add(i);
+        String TEXT = "на дворе трава на траве дрова не руби дрова на траве двора";
+        Set<String> wordSet = new HashSet<>(Arrays.asList(TEXT.split(" ")));
+
+        Iterator<String> iter = wordSet.iterator();
+        while (iter.hasNext())
+            if (iter.next().contains("ра"))
+                iter.remove();
+
+        System.out.println(wordSet.size());
 
 
+    }
 
-        for (ListIterator<Integer> listIterator = linkedList.listIterator(); listIterator.hasNext(); ) {
-            Integer n = listIterator.next();
-            if (n % 2 != 0)
-                listIterator.remove();
-            else
-                listIterator.add(n * 2);
+    public Set<Integer> a2set(int[] a) {
+
+        Set<Integer> set  = new HashSet<>();
+        for (int i = 0; i < a.length; i++) {
+            set.add(a[i]);
         }
-        System.out.println(linkedList);
+        return set;
     }
 
     public Integer sqr(Integer n) {
