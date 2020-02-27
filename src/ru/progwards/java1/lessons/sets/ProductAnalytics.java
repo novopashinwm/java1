@@ -39,15 +39,23 @@ public class ProductAnalytics {
 
     public Set<Product> existOnlyInOne(){
         Set<Product> set = new HashSet<>();
+        List<Product> list = new ArrayList<>();
         for (Iterator<Shop> it = shops.iterator(); it.hasNext();) {
             for (Iterator<Product> p = it.next().getProducts().iterator(); p.hasNext() ; ) {
                 Product product = p.next();
-                if (!set.contains(product))
+                if (list.contains(product)) {
+                    continue;
+                }
+                if (!set.contains(product)) {
                     set.add(product);
-                else
+                }
+                else {
                     set.remove(product);
+                    list.add(product);
+                }
             }
         }
+
         return set;
     }
 
@@ -60,9 +68,9 @@ public class ProductAnalytics {
     }
 
     public static void main(String[] args) {
-        String[] prShop1 = new String[] { "art-2" , "art-4" ,"art-7" };
-        String[] prShop2 = new String[] { "art-1" , "art-5" , "art-10" };
-        String[] prShop3 = new String[] { "art-1" , "art-4" ,"art-5" , "art-9" , "art-10"};
+        String[] prShop1 = new String[] { "art-1" , "art-2" , "art-3" , "art-9" , "art-10" };
+        String[] prShop2 = new String[] { "art-2" , "art-3" , "art-5" , "art-8" , "art-10" };
+        String[] prShop3 = new String[] { "art-6" , "art-7" , "art-10"};
         String[] prProds = new String[] { "art-1" , "art-2" , "art-3" ,"art-4" , "art-5"
                 , "art-6" ,"art-7" , "art-8" , "art-9" , "art-10"};
 

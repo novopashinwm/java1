@@ -15,19 +15,22 @@ public class LettersInFile {
             while (scanner.hasNext()) {
                 char[] arrCh = scanner.next().toCharArray();
                 for (int i = 0; i < arrCh.length; i++) {
-                    set.add(arrCh[i]);
+                    if (Character.isAlphabetic(arrCh[i]))
+                        set.add(arrCh[i]);
                 }
             }
         } catch (IOException e) {
             throw e;
         }
 
-        return set.toString();
+        return set.toString().replace(", ", "")
+                .replace("[","")
+                .replace("]","");
     }
 
     public static void main(String[] args) {
         try {
-            process("test02.txt");
+            System.out.println( process("test02.txt"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
