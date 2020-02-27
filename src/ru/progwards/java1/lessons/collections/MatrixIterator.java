@@ -11,8 +11,11 @@ public class MatrixIterator<T> implements Iterator<T> {
 
     public MatrixIterator(T[][] array) {
         this.array = array;
-        this.m = array[0].length;
-        this.n = array.length;
+
+        if (array.length!=0) {
+            this.m = array[0].length;
+            this.n = array.length;
+        }
 
     }
 
@@ -30,7 +33,7 @@ public class MatrixIterator<T> implements Iterator<T> {
     public static void main(String[] args) {
         Integer[][] arr = new Integer[][] { {1,2,3,4,5}
                                   , {6,7,8,9,0}};
-        MatrixIterator<Integer> matrix = new MatrixIterator<>(arr);
+        MatrixIterator<Integer> matrix = new MatrixIterator<>(new Integer[0][1]);
 
         for ( ; matrix.hasNext() ; ) {
             System.out.println(matrix.next());
