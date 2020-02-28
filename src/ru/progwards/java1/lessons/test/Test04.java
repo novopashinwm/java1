@@ -15,6 +15,12 @@ public class Test04 {
         System.out.println(deque);
     }
 
+    int sumLastAndFirst(ArrayDeque<Integer> deque) {
+        if (deque.size() ==0)
+            return 0;
+        return deque.getFirst() + deque.getLast();
+    }
+
     ArrayDeque<Integer> array2queue(int[] a) {
         ArrayDeque<Integer> deque = new ArrayDeque<>();
         for (int i = 0; i < a.length; i++) {
