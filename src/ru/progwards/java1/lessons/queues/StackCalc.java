@@ -4,6 +4,8 @@ import java.util.List;
 
 public class StackCalc {
 
+    public static Calculate calculate;
+
     public void push(double value) {
 
     }

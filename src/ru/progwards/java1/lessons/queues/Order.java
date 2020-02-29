@@ -2,10 +2,12 @@ package ru.progwards.java1.lessons.queues;
 
 public class Order {
     private double sum;
-    private static int num = 0;
+    private static  int autonum =0 ;
+    private  int num = 0;
 
     public Order(double sum) {
-        Order.num++;
+        Order.autonum++;
+        num = Order.autonum;
         this.sum = sum;
     }
 
@@ -14,6 +16,6 @@ public class Order {
     }
 
     public int getNum() {
-        return Order.num;
+        return num;
     }
 }
