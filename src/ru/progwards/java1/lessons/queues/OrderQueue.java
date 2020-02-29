@@ -9,10 +9,10 @@ public class OrderQueue {
         public int compare(Order o1, Order o2) {
             int pr1 = getPriority(o1);
             int pr2 = getPriority(o2);
-            if (pr1!=pr2){
-                return Integer.compare(pr2,pr1);
+            if (pr1!=pr2) {
+                Integer.compare(pr2,pr1);
             }
-            return Double.compare(o2.getSum(), o1.getSum()) ;
+            return Integer.compare(o1.getNum(),o2.getNum());
         }
     });
 
@@ -37,10 +37,11 @@ public class OrderQueue {
     }
 
     public static void main(String[] args) {
-        double[] arrD = new double[] {10860.0, 4972.0, 11092.0, 14961.0, 28601.0, 14112.0, 27732.0,
-                18882.0, 27359.0, 18814.0, 26727.0, 9021.0, 27244.0,
-                25308.0, 17677.0, 21591.0, 5501.0, 17750.0, 7537.0, 12229.0,
-                18492.0, 23496.0, 15970.0, 15642.0};
+        double[] arrD = new double[] {17897.0, 22121.0,
+                6118.0, 17190.0, 8859.0, 23732.0, 12643.0, 25460.0,
+                4641.0, 16820.0, 17906.0, 3529.0, 27443.0, 9659.0, 11815.0,
+                10449.0, 14564.0, 18596.0, 18801.0, 4057.0, 11889.0,
+                12476.0, 8750.0, 15398.0};
         OrderQueue orderQueue = new OrderQueue();
         for (int i = 0; i < arrD.length; i++) {
             orderQueue.add(new Order(arrD[i]));
