@@ -1,16 +1,16 @@
 package ru.progwards.java1.lessons.queues;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+
 
 public class CollectionsSort {
 
     public static void mySort(Collection<Integer> data) {
         for (int i = 0; i < data.size() ; i++) {
             for (int j = i+1; j < data.size(); j++) {
-                swap(((List<Integer>)data),i,j);
+                if (((List<Integer>)data).get(i)>((List<Integer>)data).get(j)) {
+                    swap(((List<Integer>) data), i, j);
+                }
             }
         }
     }
@@ -30,12 +30,15 @@ public class CollectionsSort {
     */
     public static void minSort(Collection<Integer> data) {
         List<Integer> list = new ArrayList<>();
+        if (data == null) {
+            return;
+        }
         while (data.size()!=0) {
             int min = Collections.min(data);
             list.add(min);
             data.remove(min);
         }
-        Collections.copy((List<Integer>)data,list);
+        data.addAll(list);
     }
 
     public static void collSort(Collection<Integer> data) {
@@ -43,6 +46,39 @@ public class CollectionsSort {
     }
 
     public static Collection<String> compareSort() {
-        return null;
+        List<String> list = new ArrayList<>();
+        list.add("collSort");
+        list.add("minSort");
+        list.add("mySort");
+        return list;
+    }
+
+
+    public static void main(String[] args) {
+        int N = 1_00000;
+        Random random = new Random();
+
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < N ; i++) {
+            list.add(random.nextInt(1000));
+        }
+        List<Integer> listTest = new ArrayList<>();
+        listTest.addAll(list);
+        long date = new Date().getTime();
+        CollectionsSort.mySort(listTest);
+        System.out.println(new Date().getTime()-date);
+
+        listTest.clear();
+        listTest.addAll(list);
+        date = new Date().getTime();
+        CollectionsSort.minSort(listTest);
+        System.out.println(new Date().getTime()-date);
+
+        listTest.clear();
+        listTest.addAll(list);
+        date = new Date().getTime();
+        CollectionsSort.collSort(listTest);
+        System.out.println(new Date().getTime()-date);
+
     }
 }
