@@ -11,6 +11,7 @@ public class Summator {
                     value1.bitArr[i] = value1.b0;
                 }
             } else if (value1.bitArr[i].equals(value1.b1) && value2.bitArr[i].equals(value2.b1)) {
+                value1.bitArr[i] = value1.b0;
                 count++;
             } else if (value1.bitArr[i].equals(value1.b0) && value2.bitArr[i].equals(value2.b0)) {
                 if (count>0) {
