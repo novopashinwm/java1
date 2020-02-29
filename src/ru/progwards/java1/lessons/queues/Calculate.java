@@ -32,9 +32,9 @@ public class  Calculate {
         stackCalc.sub();
         stackCalc.mul();
         stackCalc.add();
-        System.out.println(stackCalc.pop());
 
-        return 0.0;
+
+        return stackCalc.pop();
     }
 
 }
