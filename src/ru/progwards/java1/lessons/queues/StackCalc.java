@@ -21,12 +21,12 @@ public class StackCalc {
     public void add() {
         double a = pop();
         double b = pop();
-        push(a+b);
+        push(a + b);
     }
 
     public void sub() {
-        double a = pop();
         double b = pop();
+        double a = pop();
         push( a - b);
     }
 
@@ -37,8 +37,8 @@ public class StackCalc {
     }
 
     public void div() {
-        double a = pop();
         double b = pop();
+        double a = pop();
         push( a / b);
     }
 
