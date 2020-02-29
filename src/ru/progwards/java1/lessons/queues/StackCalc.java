@@ -43,23 +43,9 @@ public class StackCalc {
     }
 
     public static void main(String[] args) {
-        Stack<Integer> stack = new Stack<>();
-        int i = stack.peek();
+
+        System.out.println(Calculate.calculation2());
     }
 
-    static class  Calculate {
-        public static double calculation1() {
-            StackCalc calc = new StackCalc();
-            calc.push(12.1);
-            calc.push(3.0);
-            calc.add();
-            calc.push(2.2);
-            calc.mul();
-            return calc.pop();
-        }
-        public static double calculation2() {
-            return 0.0;
-        }
 
-    }
 }
