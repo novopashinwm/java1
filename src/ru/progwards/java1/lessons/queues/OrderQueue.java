@@ -10,7 +10,7 @@ public class OrderQueue {
             int pr1 = getPriority(o1);
             int pr2 = getPriority(o2);
             if (pr1!=pr2) {
-                Integer.compare(pr2,pr1);
+                return Integer.compare(pr2,pr1);
             }
             return Integer.compare(o1.getNum(),o2.getNum());
         }
@@ -22,9 +22,9 @@ public class OrderQueue {
 1 - заказы от 20000 руб
     * */
     private int  getPriority(Order order) {
-        if (order.getSum()<=100_000.00)
+        if (order.getSum()<=10_000.00)
             return 1;
-        if (order.getSum()>100_000.00 && order.getSum()<=200_000.00)
+        if (order.getSum()>10_000.00 && order.getSum()<=20_000.00)
             return 2;
         return 3;
     }
