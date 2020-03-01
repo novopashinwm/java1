@@ -1,6 +1,7 @@
 package ru.progwards.java1.lessons.test;
 
 import java.util.ArrayDeque;
+import java.util.HashMap;
 
 public class Test04 {
     public static void main(String[] args) {
@@ -13,6 +14,14 @@ public class Test04 {
         }
 
         System.out.println(deque);
+    }
+
+    HashMap<Integer, String> a2map(int[] akey, String[] aval) {
+        HashMap<Integer, String> map = new HashMap<>();
+        for (int i = 0; i < akey.length; i++) {
+            map.put(akey[i], aval[i]);
+        }
+        return map;
     }
 
     int sumLastAndFirst(ArrayDeque<Integer> deque) {
