@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class FiboMapCache {
     private Map<Integer, BigDecimal> fiboCache = new HashMap<>();
-    private boolean casheOn;
+    private boolean casheOn = false;
     private BigDecimal a = BigDecimal.ZERO;
     private BigDecimal b = BigDecimal.ONE;
     private BigDecimal x = null;
@@ -26,25 +26,25 @@ public class FiboMapCache {
             if (ret != null) {
                 return ret;
             }
-            int begin = 2;
-            if (casheOn) {
-                begin = fiboCache.size();
-            }
-            for (int i = begin; i <=n ; i++) {
-                if (casheOn &&  (x = fiboCache.get(i))!= null) {
-                    a = fiboCache.get(i-2);
-                    b = fiboCache.get(i-1);
-                    ret = x;
-                } else {
-                    ret = a.add(b);
-                    if (casheOn) {
-                        fiboCache.put(i, ret);
-                    }
-                }
-                a = b;
-                b = ret;
-            }
+        }
 
+        int begin = 2;
+        if (casheOn) {
+            begin = fiboCache.size();
+        }
+        for (int i = begin; i <=n ; i++) {
+            if (casheOn &&  (x = fiboCache.get(i))!= null) {
+                a = fiboCache.get(i-2);
+                b = fiboCache.get(i-1);
+                ret = x;
+            } else {
+                ret = a.add(b);
+                if (casheOn) {
+                    fiboCache.put(i, ret);
+                }
+            }
+            a = b;
+            b = ret;
         }
         return ret;
     }
@@ -53,9 +53,24 @@ public class FiboMapCache {
         fiboCache = null;
     }
 
+    public static void test() {
+        FiboMapCache f = new FiboMapCache(false);
+        long st = System.currentTimeMillis();
+        for (int i = 1; i <=1000 ; i++) {
+            f.fiboNumber(i);
+        }
+        System.out.println(System.currentTimeMillis()-st);
+
+        f.clearCahe();
+        f = new FiboMapCache(true);
+        st = System.currentTimeMillis();
+        for (int i = 1; i <= 1000; i++) {
+            f.fiboNumber(i);
+        }
+        System.out.println(System.currentTimeMillis()-st);
+    }
+
     public static void main(String[] args) {
-        FiboMapCache fiboMapCache = new FiboMapCache(true);
-        System.out.println(fiboMapCache.fiboNumber(40));
-        System.out.println(fiboMapCache.fiboNumber(50));
+        FiboMapCache.test();
     }
 }
