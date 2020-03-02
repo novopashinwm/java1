@@ -87,7 +87,7 @@ public class FiboMapCache {
     //1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,
     // 1597,2584,4181,6765,10946,17711,28657,46368,75025,121393,196418,317811,514229
     public static void main(String[] args) {
-       FiboMapCache f = new FiboMapCache(false);
+       FiboMapCache f = new FiboMapCache(true);
         for (int i = 1; i < 30; i++) {
             System.out.print(f.fiboNumber(i)+", ");
         }
