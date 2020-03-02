@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FiboMapCache {
-    private Map<Integer, BigDecimal> fiboCache = new HashMap<>();
+    private Map<Integer, BigDecimal> fiboCache = null;
     private boolean casheOn = false;
     private BigDecimal a = BigDecimal.ZERO;
     private BigDecimal b = BigDecimal.ONE;
@@ -15,21 +15,18 @@ public class FiboMapCache {
     public FiboMapCache(boolean cacheOn) {
         this.casheOn = cacheOn;
         if (casheOn) {
-            fiboCache.put(0, a);
-            fiboCache.put(1, b);
+            InitCache();
         }
-        x = a.add(b);
     }
 
     public BigDecimal fiboNumber(int n) {
 
         int begin = 2;
-
         if (casheOn) {
             begin = fiboCache.size();
         }
 
-        if (casheOn && fiboCache.containsKey(n) ) {
+        if (casheOn  ) {
             ret = fiboCache.get(n);
             if (ret != null) {
                 return ret;
@@ -61,6 +58,13 @@ public class FiboMapCache {
 
     public void clearCahe() {
         fiboCache = null;
+        InitCache();
+    }
+
+    private void InitCache() {
+        fiboCache = new HashMap<>();
+        fiboCache.put(0, a);
+        fiboCache.put(1, b);
     }
 
     public static void test() {
