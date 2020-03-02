@@ -10,6 +10,7 @@ public class FiboMapCache {
     private BigDecimal a = BigDecimal.ZERO;
     private BigDecimal b = BigDecimal.ONE;
     private BigDecimal x = null;
+    private BigDecimal ret = BigDecimal.ZERO;
 
     public FiboMapCache(boolean cacheOn) {
         this.casheOn = cacheOn;
@@ -17,15 +18,21 @@ public class FiboMapCache {
             fiboCache.put(0, a);
             fiboCache.put(1, b);
         }
+        x = a.add(b);
     }
 
     public BigDecimal fiboNumber(int n) {
-        BigDecimal ret = BigDecimal.ZERO;
+
         if (casheOn) {
             ret = fiboCache.get(n);
             if (ret != null) {
                 return ret;
             }
+        } else  {
+            a = BigDecimal.ZERO;
+            b = BigDecimal.ONE;
+            ret = BigDecimal.ONE;
+
         }
 
         int begin = 2;
@@ -38,6 +45,7 @@ public class FiboMapCache {
                 b = fiboCache.get(i-1);
                 ret = x;
             } else {
+
                 ret = a.add(b);
                 if (casheOn) {
                     fiboCache.put(i, ret);
@@ -70,7 +78,9 @@ public class FiboMapCache {
         System.out.println(System.currentTimeMillis()-st);
     }
 
+    //1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,
+    // 1597,2584,4181,6765,10946,17711,28657,46368,75025,121393,196418,317811,514229
     public static void main(String[] args) {
-        FiboMapCache.test();
+       FiboMapCache.test();
     }
 }
