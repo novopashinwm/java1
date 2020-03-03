@@ -22,20 +22,22 @@ public class FiboMapCache {
     public BigDecimal fiboNumber(int n) {
 
         int begin = 2;
-        if (casheOn) {
-            begin = fiboCache.size();
-        }
 
-        if (casheOn  ) {
+        if (casheOn) {
+            if (fiboCache == null) {
+                InitCache();
+            }
             ret = fiboCache.get(n);
             if (ret != null) {
                 return ret;
             }
-        } else if (!casheOn)  {
+            begin = fiboCache.size();
+        }
+
+        if (!casheOn)  {
             a = BigDecimal.ZERO;
             b = BigDecimal.ONE;
             ret = BigDecimal.ONE;
-
         }
 
         for (int i = begin; i <=n ; i++) {
@@ -58,13 +60,16 @@ public class FiboMapCache {
 
     public void clearCahe() {
         fiboCache = null;
-        InitCache();
+
     }
 
     private void InitCache() {
         fiboCache = new HashMap<>();
+        a = BigDecimal.ZERO;
+        b = BigDecimal.ONE;
         fiboCache.put(0, a);
         fiboCache.put(1, b);
+        ret = BigDecimal.ZERO;
     }
 
     public static void test() {
@@ -91,5 +96,11 @@ public class FiboMapCache {
         for (int i = 1; i < 30; i++) {
             System.out.print(f.fiboNumber(i)+", ");
         }
+        f.clearCahe();
+        System.out.println();
+        for (int i = 1; i < 30; i++) {
+            System.out.print(f.fiboNumber(i)+", ");
+        }
+
     }
 }
