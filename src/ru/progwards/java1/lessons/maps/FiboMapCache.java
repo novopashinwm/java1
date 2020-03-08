@@ -5,40 +5,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FiboMapCache {
-    private Map<Integer, BigDecimal> fiboCache = null;
-    private boolean casheOn = false;
+    private Map<Integer, BigDecimal> fiboCache = new HashMap<>();
+    private boolean cascheOn = false;
 
     public FiboMapCache(boolean cacheOn) {
-        this.casheOn = cacheOn;
+        this.cascheOn = cacheOn;
     }
 
     public BigDecimal fiboNumber(int n) {
-        if (casheOn) {
-            return fidoNumberWithCash(n);
-        } else  {
-            return fidoNumberNonCash(n);
+        if (cascheOn == true) {
+
+            if (fiboCache != null && fiboCache.containsKey(n)) {
+                return fiboCache.get(n);
+            } else {
+                BigDecimal res = fidoNumberNonCash(n);
+                fiboCache.put(n, res);
+                return res;
+            }
+
         }
+        return fidoNumberNonCash(n);
     }
 
-    private BigDecimal fidoNumberWithCash(int n) {
 
-        if (fiboCache == null) {
-            fiboCache = new HashMap<>();
-            fiboCache.put(0, BigDecimal.ZERO);
-            fiboCache.put(1, BigDecimal.ONE);
-        }
-        if (n > 1) {
-            fiboCache.put(n, fiboCache.get(n - 2).add(fiboCache.get(n - 1)));
-            BigDecimal a = fiboCache.get(n - 2);
-            BigDecimal b = fiboCache.get(n - 1);
-            BigDecimal x = fiboCache.get(n);
-            fiboCache.clear();
-            fiboCache.put(n - 2, a);
-            fiboCache.put(n - 1, b);
-            fiboCache.put(n, x);
-        }
-        return fiboCache.get(n);
-    }
 
     private BigDecimal fidoNumberNonCash(int n) {
         BigDecimal a = BigDecimal.ZERO;
@@ -53,7 +42,7 @@ public class FiboMapCache {
     }
 
     public void clearCahe() {
-        fiboCache = null;
+        fiboCache.clear();
     }
 
 
