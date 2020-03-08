@@ -3,33 +3,24 @@ package ru.progwards.java1.lessons.maps;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class FiboMapCache {
     private Map<Integer, BigDecimal> fiboCache = new HashMap<>();
-    private boolean cascheOn = false;
+    private boolean cacheOn = false;
 
     public FiboMapCache(boolean cacheOn) {
-        this.cascheOn = cacheOn;
+        this.cacheOn = cacheOn;
     }
 
     public BigDecimal fiboNumber(int n) {
-        if (cascheOn == true) {
 
-            if (fiboCache != null && fiboCache.containsKey(n)) {
-                return fiboCache.get(n);
-            } else {
-                BigDecimal res = fidoNumberNonCash(n);
-                fiboCache.put(n, res);
-                return res;
+        if (cacheOn && fiboCache != null){
+            BigDecimal result = fiboCache.get(n);
+            if (result != null){
+                return result;
             }
-
         }
-        return fidoNumberNonCash(n);
-    }
-
-
-
-    private BigDecimal fidoNumberNonCash(int n) {
         BigDecimal a = BigDecimal.ZERO;
         BigDecimal b = BigDecimal.ONE;
         BigDecimal x = BigDecimal.ONE;
@@ -38,13 +29,18 @@ public class FiboMapCache {
             a = b;
             b = x;
         }
+        if (cacheOn) {
+            if (fiboCache == null) {
+                fiboCache = new TreeMap<>();
+            }
+            fiboCache.put(n, x);
+        }
         return x;
     }
 
     public void clearCahe() {
-        fiboCache.clear();
+        fiboCache = null;
     }
-
 
     public static void test() {
         FiboMapCache f = new FiboMapCache(false);
