@@ -30,6 +30,13 @@ public class FiboMapCache {
         if (n > 1) {
             fiboCache.put(n , fiboCache.get(n-2).add( fiboCache.get(n-1)) );
         }
+        BigDecimal a = fiboCache.get(n - 2);
+        BigDecimal b = fiboCache.get(n - 1);
+        BigDecimal x = fiboCache.get(n);
+        fiboCache.clear();
+        fiboCache.put(n - 2,  a);
+        fiboCache.put(n - 1,  b);
+        fiboCache.put(n , x);
         return fiboCache.get(n);
     }
 
@@ -92,7 +99,6 @@ public class FiboMapCache {
         for (int i = 1; i < 30; i++) {
             System.out.print(f.fiboNumber(i) + ", ");
         }
-
 
         System.out.println();
         f = new FiboMapCache(false);
