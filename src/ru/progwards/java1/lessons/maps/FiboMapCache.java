@@ -74,6 +74,7 @@ public class FiboMapCache {
         }
         System.out.println(System.currentTimeMillis()-st);
 
+        f = new FiboMapCache(true);
         f.clearCahe();
 
         st = System.currentTimeMillis();
