@@ -22,27 +22,15 @@ public class FiboMapCache {
 
     private BigDecimal fidoNumberWithCash(int n) {
 
-        BigDecimal ret = BigDecimal.ONE;
-
-        if (fiboCache != null ) {
-            if ((ret = fiboCache.get(n)) != null) {
-                return ret;
-            }
-        } else {
+        if (fiboCache == null) {
             fiboCache = new HashMap<>();
+            fiboCache.put(0, BigDecimal.ZERO);
+            fiboCache.put(1, BigDecimal.ONE);
         }
-
-        BigDecimal a = BigDecimal.ZERO;
-        BigDecimal b = BigDecimal.ONE;
-
-        for (int i = 2; i <=n ; i++) {
-            ret = a.add(b);
-            a = b;
-            b = ret;
+        if (n > 1) {
+            fiboCache.put(n , fiboCache.get(n-2).add( fiboCache.get(n-1)) );
         }
-        fiboCache.clear();
-        fiboCache.put(n+1, a.add(b));
-        return ret;
+        return fiboCache.get(n);
     }
 
     private BigDecimal fidoNumberNonCash(int n) {
@@ -55,7 +43,6 @@ public class FiboMapCache {
             b = x;
         }
         return x;
-
     }
 
     public void clearCahe() {
