@@ -15,7 +15,7 @@ public class Insurance {
     }
 
     public Insurance(String strStart, FormatStyle style) {
-        this.start = ZonedDateTime.parse(strStart);
+        //this.start = ZonedDateTime.parse(strStart);
         this.style = style;
     }
 
