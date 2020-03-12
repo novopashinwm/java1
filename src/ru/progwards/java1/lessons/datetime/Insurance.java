@@ -98,11 +98,8 @@ public class Insurance {
 
     @Override
     public String toString() {
-        String add = " is valid";
-        if (!checkValid(start)) {
-            add = " is not valid";
-        }
-        return "Insurance issued on " + start +  add;
+        String validStr = checkValid(ZonedDateTime.now()) ? " is valid" : " is not valid";
+        return "Insurance issued on " + start + validStr;
     }
 
     public static void main(String[] args) {
