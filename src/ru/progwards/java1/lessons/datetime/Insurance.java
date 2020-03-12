@@ -45,8 +45,19 @@ public class Insurance {
     }
 
     public boolean checkValid(ZonedDateTime dateTime) {
-        end = start.plus(duration);
-        return dateTime.isAfter(start) && dateTime.isBefore(end);
+        /* преобразуем дату-время в миллисекунды */
+        long longStart = start.toEpochSecond();
+        long longDateTime = dateTime.toEpochSecond();
+
+        /* если проверочная дата меньше даты начала, то есть, до того как страховка начала действовать, возвращаем ложь */
+        if (longDateTime < longStart){
+            return false;
+            /* если продолжительность ровна нулю, значит страховка бессрочная и возвращаем истину */
+        } else if (duration == null){
+            return true;
+            /* если проверочная дата меньше даты окончания страховки, возвращается истина, если больше, то возвращается ложь */
+        } else
+            return longDateTime <= (start.plus(duration)).toEpochSecond();
     }
 
     @Override
