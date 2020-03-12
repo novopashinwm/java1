@@ -63,7 +63,7 @@ public class Insurance {
     @Override
     public String toString() {
         String add = " is valid";
-        if (checkValid(start)) {
+        if (!checkValid(start)) {
             add = " is not valid";
         }
         return "Insurance issued on " + start +  add;
