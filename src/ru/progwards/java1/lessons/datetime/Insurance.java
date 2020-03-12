@@ -1,7 +1,6 @@
 package ru.progwards.java1.lessons.datetime;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.time.ZonedDateTime;
 
 public class Insurance {
@@ -16,6 +15,7 @@ public class Insurance {
     }
 
     public Insurance(String strStart, FormatStyle style) {
+        this.start = ZonedDateTime.parse(strStart);
         this.style = style;
     }
 
