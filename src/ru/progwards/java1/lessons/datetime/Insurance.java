@@ -45,11 +45,39 @@ public class Insurance {
     }
 
     public void setDuration(int months, int days, int hours) {
-
+        ZonedDateTime endDate = start.plusMonths(months).plusDays(days).plusHours(hours);
+        setDuration(endDate);
     }
 
     public void setDuration(String strDuration, FormatStyle style) {
+        switch (style) {
 
+            case SHORT:
+
+                /* закомментированная строка рабочая, просто в более длинном написание */
+//                duration = Duration.of(Long.parseLong(strDuration), ChronoUnit.MILLIS);
+                duration = Duration.ofMillis(Long.parseLong(strDuration));
+                break;
+
+            case LONG:
+                /* получаем дату в формате "0000-01-01T00:00:00", которая означает продолжительность 1 месяц и 1 день.
+                 * парсим дату из текстового формата и далее поочередно выдергивая значения - количество лет, месяцев, дней, часов и т.д.
+                 * приплюссовываем к стартовой дате */
+                ZonedDateTime inputDateTime = ZonedDateTime.parse(strDuration, DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneOffset.UTC));
+                ZonedDateTime endDateTime = start.plusYears(inputDateTime.getYear()).
+                        plusMonths(inputDateTime.getMonthValue()).
+                        plusDays(inputDateTime.getDayOfMonth()).
+                        plusHours(inputDateTime.getHour()).
+                        plusMinutes(inputDateTime.getMinute()).
+                        plusSeconds(inputDateTime.getSecond()).
+                        plusNanos(inputDateTime.getNano());
+                /* рассчитываем продолжительность между начальной и конечной датами */
+                duration = Duration.between(start, endDateTime);
+                break;
+            case FULL:
+                duration = Duration.parse(strDuration);
+                break;
+        }
     }
 
     public boolean checkValid(ZonedDateTime dateTime) {
@@ -71,7 +99,7 @@ public class Insurance {
     @Override
     public String toString() {
         String add = " is valid";
-        if (checkValid(start)) {
+        if (!checkValid(start)) {
             add = " is not valid";
         }
         return "Insurance issued on " + start +  add;
