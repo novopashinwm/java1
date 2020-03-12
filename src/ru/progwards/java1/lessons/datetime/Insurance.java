@@ -15,15 +15,23 @@ public class Insurance {
     }
 
     public Insurance(String strStart, FormatStyle style) {
-        switch (style){
+        switch (style) {
+
             case SHORT:
-                start = ZonedDateTime.of(LocalDate.parse(strStart, DateTimeFormatter.ISO_LOCAL_DATE), LocalTime.MIDNIGHT, ZoneId.systemDefault());
+                /* получаем локальную дату без времени */
+                LocalDate localDate = LocalDate.from(DateTimeFormatter.ISO_LOCAL_DATE.parse(strStart));
+                /* устанавливаем время всеми нолями */
+                LocalTime localTime = LocalTime.of(0, 0, 0);
+                /* преобразуем в дату ZonedDateTime, где время будет состоять из нолей */
+                start = ZonedDateTime.of(localDate, localTime, ZoneId.systemDefault());
                 break;
             case LONG:
-                start = ZonedDateTime.parse(strStart, DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.systemDefault()));
+                LocalDateTime localDateTime = LocalDateTime.from(DateTimeFormatter.ISO_LOCAL_DATE_TIME.parse(strStart));
+                start = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
                 break;
             case FULL:
-                start = ZonedDateTime.parse(strStart, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+                DateTimeFormatter dtFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+                start = ZonedDateTime.parse(strStart, dtFormatter);
                 break;
         }
     }
