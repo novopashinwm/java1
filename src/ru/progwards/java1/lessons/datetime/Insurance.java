@@ -1,7 +1,7 @@
 package ru.progwards.java1.lessons.datetime;
 
-import java.time.Duration;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public class Insurance {
     public static enum FormatStyle {SHORT, LONG, FULL}
@@ -15,8 +15,17 @@ public class Insurance {
     }
 
     public Insurance(String strStart, FormatStyle style) {
-        //this.start = ZonedDateTime.parse(strStart);
-        this.style = style;
+        switch (style){
+            case SHORT:
+                start = ZonedDateTime.of(LocalDate.parse(strStart, DateTimeFormatter.ISO_LOCAL_DATE), LocalTime.MIDNIGHT, ZoneId.systemDefault());
+                break;
+            case LONG:
+                start = ZonedDateTime.parse(strStart, DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.systemDefault()));
+                break;
+            case FULL:
+                start = ZonedDateTime.parse(strStart, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+                break;
+        }
     }
 
     public void setDuration(Duration duration) {
