@@ -1,6 +1,7 @@
 package ru.progwards.java1.lessons.datetime;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 
 public class Insurance {
@@ -22,11 +23,11 @@ public class Insurance {
     }
 
     public void setDuration(ZonedDateTime expiration) {
-
+        this.duration = Duration.between(start,expiration);
     }
 
     public void setDuration(int months, int days, int hours) {
-        
+
     }
 
     public void setDuration(String strDuration, FormatStyle style) {
