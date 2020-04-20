@@ -22,72 +22,79 @@ dir1/file1, dir2/dir3/file1
 dir1/file3, dir2/dir3/file3
 * */
 public class FindDuplicates {
-    //    Создание Map с именами файлов по результатам сравнения файлов
-    private List<Path> fileList(String start){
-        List<Path> fileList = new ArrayList<>();
-        Path pathFile = Paths.get(start);
-        PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:**/**");
-        try {
-            Files.walkFileTree(pathFile, new SimpleFileVisitor<Path>() {
+    List<Path> temporaryList = new ArrayList<>();
 
+    public List<List<String>> findDuplicates(String startPath) {
+        /* проходим по всем каталогам и собираем ссылки на все файлы, далее помещаем в temporaryList */
+        try {
+            Files.walkFileTree(Paths.get(startPath), new SimpleFileVisitor<Path>() {
                 @Override
-                public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
-//                    if (pathMatcher.matches(pathFile.relativize(path))) {
-                    if (pathMatcher.matches(path)) {
-                        fileList.add(path);
-                        return FileVisitResult.CONTINUE;
-                    }
+                public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
+                    temporaryList.add(path);
                     return FileVisitResult.CONTINUE;
                 }
 
                 @Override
-                public FileVisitResult visitFileFailed(Path file, IOException exc) {
+                public FileVisitResult visitFileFailed(Path file, IOException e) {
                     return FileVisitResult.CONTINUE;
                 }
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return fileList;
+        return sameFile();
     }
 
-
-    // сравнение файлов по атрибутам и содержимому
-    private boolean fullFiltr(Path file1, Path file2){
-        try {
-            if (Files.getAttribute(file1, "lastModifiedTime").equals(Files.getAttribute(file2,
-                    "lastModifiedTime")) &&
-                    Files.getAttribute(file1, "size").equals(Files.getAttribute(file2, "size"))) {
-                if (Arrays.equals(Files.readAllBytes(file1), Files.readAllBytes(file2))) {
-//                    System.out.println("Сошлись)");
-                    return true;
+    private List<List<String>> sameFile() {
+        List<List<String>> outerList = new ArrayList<>();
+        List<String> innerList;
+        Object firstLastMod = null;
+        Object secondLastMod = null;
+        String firstContent = null;
+        String secondContent = null;
+        long firstSize = 0;
+        long secondSize = 0;
+        for (int i = 0; i < temporaryList.size(); i++) {
+            /* заводим новый внутренний ArrayList */
+            innerList = new ArrayList<>();
+            /* получаем путь из ArrayList */
+            Path firstPath = temporaryList.get(i);
+            try {
+                /* получаем атрибут - дату последнего изменения файла */
+                firstLastMod = Files.getAttribute(firstPath, "basic:lastModifiedTime");
+                /* получаем все содержимое файла */
+                firstContent = Files.readString(firstPath);
+                /* получаем размер файла */
+                firstSize = Files.size(firstPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            for (int j = i + 1; j < temporaryList.size(); j++) {
+                Path secondPath = temporaryList.get(j);
+                try {
+                    secondLastMod = Files.getAttribute(secondPath, "basic:lastModifiedTime");
+                    secondContent = Files.readString(secondPath);
+                    secondSize = Files.size(secondPath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                assert firstLastMod != null;
+                assert firstContent != null;
+                /* сравниваем файлы на равенство имен, последнего изменения, содержимого и размера */
+                if (firstPath.getFileName().equals(secondPath.getFileName()) && firstLastMod.equals(secondLastMod)
+                        && firstContent.equals(secondContent) && firstSize == secondSize) {
+                    /* чтобы избежать повторного добавления пути из внешнего цикла, проверяем его наличие в ArrayList */
+                    if (!innerList.contains(firstPath.toString())) innerList.add(firstPath.toString());
+                    /* добавляем путь к файлу, совпавшему с проверяемым (из первого цикла) */
+                    innerList.add(secondPath.toString());
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            /* если внутренний ArrayList не пустой, добавляем его во внешний ArrayList */
+            if (!innerList.isEmpty()) outerList.add(innerList);
         }
-        return false;
-    }
-
-    //    обработка Map и вывод результата
-    public List<List<String>> findDuplicates(String startPath){
-        List<List<String>> result = new ArrayList<>();
-        List<Path> tmpFileList = fileList(startPath);
-
-        for (int i = 0; i < tmpFileList.size(); i++) {
-            Path file1 = tmpFileList.get(i);
-            List<String> filePathList = new ArrayList<>();
-            for (int f = i+1; f < tmpFileList.size(); f++) {
-                Path file2 = tmpFileList.get(f);
-                if (file1.getFileName().compareTo(file2.getFileName()) == 0 && fullFiltr(file1, file2)) {
-                    filePathList.add(file1.toString());
-                    filePathList.add(file2.toString());
-                    tmpFileList.remove(f);
-                }
-            }
-            result.add(filePathList);
-        }
-        return result;
+        /* очищаем временный ArrayList */
+        temporaryList.clear();
+        return outerList;
     }
 
 }
