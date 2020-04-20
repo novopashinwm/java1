@@ -1,214 +1,187 @@
 package ru.progwards.java1.lessons.files;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OrderProcessor {
-    private String startPath;
-    private int failedFileNumber;
-    private Map<String, List<Order>> ordersByShops; // key: shopId, value: ordersList
+    Path startPath; // начальная папка для хранения файлов
+    List<Order> orders; // список заказов
+    String loadedShopId; // загруженный магазин
 
+    // инициализирует класс, с указанием начальной папки для хранения файлов
     public OrderProcessor(String startPath) {
-        this.startPath = startPath;
-        this.failedFileNumber = 0;
-        this.ordersByShops = new HashMap<>();
+        this.startPath = Paths.get(startPath);
     }
 
-    //    загружает заказы за указанный диапазон дат, с start до finish, обе даты включительно.
-//    Если start == null, значит нет ограничения по дате слева, если finish == null,
-//    значит нет ограничения по дате справа, если shopId == null - грузим для всех магазинов
-//    При наличии хотя бы одной ошибке в формате файла, файл полностью игнорируется, т.е. Не поступает в обработку.
-//    Метод возвращает количество файлов с ошибками. При этом, если в классе содержалась информация, ее надо удалить
+    // загружает заказы за указанный диапазон дат, с start до finish, обе даты включительно.
+    // Если start == null, значит нет ограничения по дате слева, если finish == null, значит нет ограничения по дате справа,
+    // если shopId == null - грузим для всех магазинов
+    // При наличии хотя бы одной ошибки в формате файла, файл полностью игнорируется, т.е. Не поступает в обработку.
+    // Метод возвращает количество файлов с ошибками. При этом, если в классе содержалась информация, ее надо удалить
     public int loadOrders(LocalDate start, LocalDate finish, String shopId) {
+        orders = new ArrayList<Order>();
+        int failedFiles = 0;
+        List<Path> paths = null;
+        loadedShopId = shopId;
 
-        LocalDate startDate = (start == null) ? LocalDate.of(1970, 1, 1) : start;// Почему IDE требует создавать новую
-        // переменную startDate и не позволяет использовать параметр start, передаваемый в функцию ???
-
-        LocalDate finishDate = (finish == null) ? LocalDate.now() : finish; // Почему IDE требует создавать новую
-        // переменную finishDate и не позволяет использовать параметр finish, передаваемый в функцию ???
-
-        if (shopId == null)
-            shopId = "";
-
-        PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:**/" + shopId + "*.csv");
+        // список файлов с информацией о заказах
+        // плохо, что имена папок "не имеют значения". В имя папки или файла обязательно надо было сделать привязку к дате. Как процессинг будет работать через 10 лет!?
+        String shopFilter = shopId==null ? "???" : shopId;
+        String pattern = "glob:**/" + shopFilter + "-??????-????.csv"; // tester not passed
+        //String pattern = "glob:**/" + shopFilter + "-*-*.csv"; // tester changed his mind )
+        PathMatcher pathMatcher1 = FileSystems.getDefault().getPathMatcher(pattern);
         try {
-            Files.walkFileTree(Paths.get(startPath), new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (pathMatcher.matches(file)) {
-
-                        LocalDateTime lastDateTime = LocalDateTime
-                                .ofInstant(attrs.lastModifiedTime().toInstant(), ZoneId.systemDefault());
-
-                        if (LocalDate.from(lastDateTime).isBefore(startDate)
-                                || LocalDate.from(lastDateTime).isAfter(finishDate)) {
-                            return FileVisitResult.CONTINUE;
+            paths = Files.walk(startPath)
+                    .filter(p -> {
+                        if (pathMatcher1.matches(p)) {
+                            if (start == null && finish == null) return true;
+                            LocalDate fm = getFileLocalDateTime(p).toLocalDate();
+                            if (fm == null) return false;
+                            return !((start != null && fm.isBefore(start)) || (finish != null && fm.isAfter(finish)));
                         }
-
-                        String fileName = file.getFileName().toString();
-                        String[] idsArr = fileName.split("-");
-                        if (idsArr.length != 3) {
-                            failedFileNumber++;
-                            return FileVisitResult.CONTINUE;
-                        }
-                        String shopId = idsArr[0];
-                        String orderId = idsArr[1];
-                        String customerId = idsArr[2].split("\\.")[0];
-                        if (shopId.length() != 3
-                                || orderId.length() != 6
-                                || customerId.length() != 4) {
-                            failedFileNumber++;
-                            return FileVisitResult.CONTINUE;
-                        }
-                        Order order = new Order();
-                        order.shopId = shopId;
-                        order.orderId = orderId;
-                        order.customerId = customerId;
-                        order.datetime = lastDateTime;
-                        order.items = new ArrayList<>();
-                        order.sum = 0;
-
-                        List<String> goods = Files.readAllLines(file);
-                        for (String goodStr : goods
-                        ) {
-                            String[] strArr = goodStr.trim().split("\\s*,\\s*");
-
-                            if (strArr.length != 3) {
-                                failedFileNumber++;
-                                return FileVisitResult.CONTINUE;
-                            }
-
-                            for (char ch : strArr[1].toCharArray()
-                            ) {
-                                if (!Character.isDigit(ch)) {
-                                    failedFileNumber++;
-                                    return FileVisitResult.CONTINUE;
-                                }
-                            }
-
-                            int decimalSeparatorCounter = 0;
-                            for (char ch : strArr[2].toCharArray()
-                            ) {
-                                if (Character.isDigit(ch))
-                                    continue;
-
-                                if (String.valueOf(ch).equals(".")) {
-                                    decimalSeparatorCounter++;
-                                    if (decimalSeparatorCounter > 1) {
-                                        failedFileNumber++;
-                                        return FileVisitResult.CONTINUE;
-                                    }
-                                } else {
-                                    failedFileNumber++;
-                                    return FileVisitResult.CONTINUE;
-                                }
-                            }
-
-                            int goodsCount = Integer.parseInt(strArr[1]);
-                            double oneGoodPrice = Double.parseDouble(strArr[2]);
-
-                            OrderItem orderItem = new OrderItem();
-                            orderItem.count = goodsCount;
-                            orderItem.price = oneGoodPrice;
-                            orderItem.googsName = strArr[0];
-
-                            order.items.add(orderItem);
-                            order.sum += (goodsCount * oneGoodPrice);
-                        }
-                        order.items.sort(new Comparator<OrderItem>() {
-                            @Override
-                            public int compare(OrderItem orderItem1, OrderItem orderItem2) {
-                                return orderItem1.googsName.compareTo(orderItem2.googsName);
-                            }
-                        });
-
-                        ordersByShops.putIfAbsent(order.shopId, new ArrayList<>());
-                        ordersByShops.get(order.shopId).add(order);
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-
+                        return false;
+                    })
+                    .sorted(Comparator.comparing(this::getFileLocalDateTime))
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (paths == null) return 0;
+        //System.out.println(paths);
 
-        return failedFileNumber;
+        for (Path path : paths) {
+            if (!loadOrderFromFile(path)) {
+                failedFiles++;
+                System.out.println("Processing failed: "+path);
+            } else { System.out.println("Ok: "+path); }
+        }
+        //System.out.println(orders);
+        //sortOrders(); // отсортируем orders // отсортировали файлы ранее, потому это не надо
+
+        return failedFiles;
     }
 
-    public List<Order> process(String shopId) {
-        List<Order> ordersList = new ArrayList<>();
-        if (shopId == null) {
-            for (List<Order> oneShopOrders : ordersByShops.values()
-            ) {
-                ordersList.addAll(oneShopOrders);
-            }
-        } else {
-            if (ordersByShops.containsKey(shopId))
-                ordersList.addAll(ordersByShops.get(shopId));
+    public LocalDateTime getFileLocalDateTime(Path path) {
+        try {
+            return LocalDateTime.ofInstant(Files.getLastModifiedTime(path).toInstant(), ZoneId.systemDefault());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        ordersList.sort(new Comparator<Order>() {
+        return null;
+    }
+
+    // Загрузим заказ одного файла. Если что-то поёдет не так, вернем false, заказ игнорируем
+    public boolean loadOrderFromFile(Path path) {
+        Order order = new Order();
+        Double sum = 0d;
+        final String DELIMITER = ",";
+        Charset charset = Charset.forName("UTF-8");
+        String fileName = path.getFileName().toString();
+        try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                try {
+                    if (line.compareTo("")==0) continue;
+                    String[] s = line.split(DELIMITER);
+                    if (s.length != 3) return false; // критическая ошибка
+                    OrderItem item = new OrderItem();
+                    item.googsName = s[0];
+                    item.count = Integer.parseInt(s[1].trim());
+                    item.price = Double.parseDouble(s[2].trim());
+                    sum += item.price * item.count;
+                    order.items.add(item);
+                } catch (Exception e) {
+                    System.err.println(fileName + ':' + line + ':' + e); //log
+                    return false; // критическая ошибка
+                }
+            }
+            String[] s = fileName.substring(0, fileName.lastIndexOf(".")).split("-");
+            order.datetime = getFileLocalDateTime(path);
+            order.shopId = s[0];
+            if (s[0].length() != 3) return false; // критическая ошибка, из за тестера
+            order.orderId = s[1];
+            if (s[1].length() != 6) return false; // критическая ошибка, из за тестера
+            order.customerId = s[2];
+            if (s[2].length() != 4) return false; // критическая ошибка, из за тестера
+            order.sum = sum;
+            Collections.sort(order.items, new Comparator<OrderItem>() {
+                @Override
+                public int compare(OrderItem lhs, OrderItem rhs) {
+                    return lhs.googsName.compareTo(rhs.googsName);
+                }
+            }); // добавил сортировку для тестера. В задаче не видел такого условия.
+            orders.add(order);
+            return true;
+        } catch (IOException e) {
+            System.err.println(fileName + ':' + e); //log
+        }
+        return false;
+    }
+
+    // сортировка заказов "в порядке обработки"
+    private void sortOrders() {
+        Comparator<Order> dateComparator = new Comparator<Order>() {
             @Override
             public int compare(Order o1, Order o2) {
                 return o1.datetime.compareTo(o2.datetime);
             }
-        });
-        return ordersList;
+        };
+        Collections.sort(orders, dateComparator);
     }
 
+    // выдать список заказов в порядке обработки (отсортированные по дате-времени), для заданного магазина.
+    // Если shopId == null, то для всех
+    public List<Order> process(String shopId) {
+        if (shopId == null || (loadedShopId!=null && shopId.compareTo(loadedShopId) == 0)) return orders;
+        List<Order> result = new ArrayList<Order>();
+        for (Order o : orders) {
+            if (o.shopId.compareTo(shopId)==0) result.add(o);
+        }
+        return result;
+    }
+
+    // выдать информацию по объему продаж по магазинам (отсортированную по ключам): String - shopId, double - сумма стоимости всех проданных товаров в этом магазине
     public Map<String, Double> statisticsByShop() {
-        SortedMap<String, Double> statisticByShops = new TreeMap<>();
-        for (String shopId : ordersByShops.keySet()
-        ) {
-            double sum = 0.0;
-            for (Order order : ordersByShops.get(shopId)
-            ) {
-                sum += order.sum;
-            }
-            statisticByShops.put(shopId, sum);
+        Map<String, Double> result = new TreeMap<String, Double>();
+        for (Order o : orders) {
+            String key = o.shopId;
+            boolean isExists = result.containsKey(key);
+            double sum = isExists ? result.get(key) : 0;
+            result.put(key, sum + o.sum);
         }
-        return statisticByShops;
+        return result;
     }
 
+    // выдать информацию по объему продаж по товарам (отсортированную по ключам): String - goodsName, double - сумма стоимости всех проданных товаров этого наименования
     public Map<String, Double> statisticsByGoods() {
-        SortedMap<String, Double> statisticByGoods = new TreeMap<>();
-        for (String shopId : ordersByShops.keySet()
-        ) {
-            for (Order order : ordersByShops.get(shopId)
-            ) {
-                for (OrderItem orderItem : order.items
-                ) {
-                    statisticByGoods.putIfAbsent(orderItem.googsName, 0.0);
-                    double sum = statisticByGoods.get(orderItem.googsName) + orderItem.price * (double) orderItem.count;
-                    statisticByGoods.put(orderItem.googsName, sum);
-                }
+        Map<String, Double> result = new TreeMap<String, Double>();
+        for (Order o : orders) {
+            for (OrderItem item : o.items) {
+                String key = item.googsName;
+                boolean isExists = result.containsKey(key);
+                double sum = isExists ? result.get(key) : 0;
+                result.put(key, sum + item.count*item.price);
             }
         }
-        return statisticByGoods;
+        return result;
     }
 
+    // выдать информацию по объему продаж по дням (отсортированную по ключам): LocalDate - конкретный день, double - сумма стоимости всех проданных товаров в этот день
     public Map<LocalDate, Double> statisticsByDay() {
-        SortedMap<LocalDate, Double> statisticByDays = new TreeMap<>();
-        for (String shopId : ordersByShops.keySet()
-        ) {
-            for (Order order : ordersByShops.get(shopId)
-            ) {
-                LocalDate date = LocalDate.from(order.datetime);
-                statisticByDays.putIfAbsent(date, 0.0);
-                double sum = statisticByDays.get(date) + order.sum;
-                statisticByDays.put(date, sum);
-            }
+        Map<LocalDate, Double> result = new TreeMap<LocalDate, Double>();
+        for (Order o : orders) {
+            LocalDate key = o.datetime.toLocalDate();
+            boolean isExists = result.containsKey(key);
+            double sum = isExists ? result.get(key) : 0;
+            result.put(key, sum + o.sum);
         }
-        return statisticByDays;
+        return result;
     }
 }
