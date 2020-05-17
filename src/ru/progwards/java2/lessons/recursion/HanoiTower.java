@@ -1,84 +1,104 @@
 package ru.progwards.java2.lessons.recursion;
 
-import java.util.Arrays;
+import java.util.ArrayDeque;
+
+import static java.lang.String.format;
 
 public class HanoiTower {
-    private boolean onTrace = false;
-    private String empty = "  I  ";
-    private String[] arrA;
-    private String[] arrB;
-    private String[] arrC;
-    private int size, pos;
+    final static int p3 = 3;  //  для чистоты кода
+    int size;
+    int pos;
+    ArrayDeque<Integer>[] pin;  //  массив стеков на штырях
+    boolean setTrace;
 
-    public HanoiTower(int size, int pos)
-    {
+    //  --------------------------------
+    //  конструктор
+    public HanoiTower(int size, int pos) {
+        setTrace = false;
         this.size = size;
         this.pos = pos;
-        arrA = new String[size];
-        arrB = new String[size];
-        arrC = new String[size];
-        Arrays.fill(arrA, empty);
-        Arrays.fill(arrB, empty);
-        Arrays.fill(arrC, empty);
-        switch (pos){
-            case 0: InitTower(arrA); break;
-            case 1: InitTower(arrB); break;
-            case 2: InitTower(arrC); break;
+        ArrayDeque<Integer> pin1 = new ArrayDeque<Integer>();
+        ArrayDeque<Integer> pin2 = new ArrayDeque<Integer>();
+        ArrayDeque<Integer> pin3 = new ArrayDeque<Integer>();
+        pin = new ArrayDeque[]{new ArrayDeque<Integer>(),
+                new ArrayDeque<Integer>(), new ArrayDeque<Integer>()};
+        for (int i = size; i>0; i--)    //  внизу кольцо size, вверху - 1
+            pin[pos].addFirst(i);
+    }
+    void print() {
+        //  преобразовать стеки в массивы (полномерные размером size)
+        Integer[][] ar2 = new Integer[p3][];
+        for (int i = 0; i<p3; i++) {
+            ArrayDeque<Integer> pinX = pin[i];
+            Integer[] arrInt = pinX.toArray(new Integer[0]);  //  зубчатый массив
+            ar2[i] = arrInt;
         }
-        onTrace = false;
-    }
-
-    private void InitTower(String[] tower) {
-        for (int i = 0; i < size; i++) {
-            tower[i] ="<00"+(i+1) +">";
+        //  цикл по горизонталям
+        for (int i = 0; i<size; i++){
+            StringBuilder line = new StringBuilder();
+            //  цикл по штырям (всего их 3)
+            for (int j = 0; j<p3; j++) {
+                int shift = size - ar2[j].length;   //  пропуск верхних ячеек
+                if (shift > i)
+                    line.append("  I  ").append(" ");
+                else
+                    line.append(format("<%03d>", ar2[j][i - shift])).append(" ");
+            }
+            System.out.println(line.substring(0,line.length()-1));
         }
+        System.out.println("=================\n");
     }
-
-    public void move(int from, int to)
-    {
-        int additional = Integer.parseInt("012".replaceAll("" + from, "")
-                .replaceAll("" + to, ""));
-        hanoi(size, from, to, additional);
+    //  включает отладочную печать состояния игрового поля после каждого шага алгоритма
+    //  (метода moveX). В результате все промежуточные ходы должны быть отображены
+    void setTrace(boolean on){
+        setTrace = on;   //  установить состояния
     }
-
-    void hanoi(int n, int from, int to, int additional) {
-
-        if (n == 0) {
-            return;
+    //  --------------------------------
+    void moveStack(int from, int to, int count) {
+        if (count > 0){
+            int othe = getIndex(from, to);
+            moveStack(from, othe,count-1); // перенести башню из n−1 диска на 2-й штырь
+            ArrayDeque<Integer> from_X = this.pin[from];
+            ArrayDeque<Integer> to_X = this.pin[to];
+            int top = from_X.pollFirst();  // переносим верхний диск
+            to_X.addFirst(top);
+            if (setTrace)
+                this.print();
+            moveStack(othe,to,count-1); // перенеси башню из n−1 диска на 2-й штырь
         }
-        hanoi(n - 1, from, additional, to);
-        System.out.println(from + " " + to);
-        if (onTrace) {
-            print();
+//        System.out.println("---=" + count + "=->=" + from + "=" + othe + "=" + to);
+    }
+    //  --------------------------------
+    //  вычислить номер третьей оси по двум известным
+    static int getIndex(int ind1, int ind2) {
+        int res = 0;
+//    Assert(ind1 <> ind2);
+        switch (ind1) {
+            case 0:
+                if (ind2 == 1) res = 2;
+                else res = 1;
+                break;
+            case 1:
+                if (ind2 == 2) res = 0;
+                else res = 2;
+                break;
+            case 2:
+                if (ind2 == 0) res = 1;
+                else res = 0;
+                break;
+
         }
-        hanoi(n - 1, additional, to, from);
+        return res;
     }
-
-    void print()
-    {
-        System.out.println(this);
-    }
-
-    void setTrace(boolean onTrace) {
-        this.onTrace = onTrace;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < size; i++) {
-            sb.append(arrA[i] + " " + arrB[i] + " " + arrC[i] +"\n");
-        }
-        sb.append("----------------\n");
-        return sb.toString();
+    public void move(int from, int to){
+        moveStack(from, to, this.size);
     }
 
     public static void main(String[] args) {
-        HanoiTower tower = new HanoiTower(3,2);
-        tower.setTrace(true);
+        HanoiTower tower = new HanoiTower(4,0);
         tower.print();
-        tower.move(2,1);
+        tower.setTrace(true);
+        tower.move(0,2);
         tower.print();
     }
-
 }

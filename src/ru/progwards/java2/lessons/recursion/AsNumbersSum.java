@@ -4,7 +4,8 @@ public class AsNumbersSum {
 
 
     public static String asNumbersSum(int number) {
-        return number + divideIntoTerms(5, 1, "");
+        return number
+                + divideIntoTerms(number, 1, "");
     }
 
     public static String divideIntoTerms(int number, int secondTerm, String lastTerm) {
@@ -17,6 +18,6 @@ public class AsNumbersSum {
 
     }
     public static void main(String[] args) {
-        System.out.println(asNumbersSum(5));
+        System.out.println(asNumbersSum(7));
     }
 }
