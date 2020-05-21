@@ -19,7 +19,9 @@ import java.util.Arrays;
  * то нужно поменять элементы a[i] и a[j] местами.
  * @param <T>
  */
-public class ArraySort<T extends Number & Comparable> {
+
+public class ArraySort<T extends Comparable> {
+
     public void sort(T[] arr) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = i+1; j < arr.length; j++) {
@@ -37,5 +39,10 @@ public class ArraySort<T extends Number & Comparable> {
         Integer[] arr = new Integer[] {3,7,4,2,1};
         m.sort(arr);
         System.out.println(Arrays.toString(arr));
+
+        ArraySort<String> s = new ArraySort<>();
+        String[] arrS = new String[] {"Jame", "Axe", "Bob", "Winsent"};
+        s.sort(arrS);
+        System.out.println(Arrays.toString(arrS));
     }
 }
