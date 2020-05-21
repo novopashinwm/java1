@@ -9,15 +9,21 @@ public class AsNumbersSum {
     }
 
     public static String divideIntoTerms(int number, int secondTerm, String lastTerm) {
-        if(number == 1)
+        if (number <= 0){
             return "";
-        if(number/2 < secondTerm)
-            return divideIntoTerms(number-1, 1, lastTerm + "+1");
-        return " = " + (number-secondTerm) + "+" + secondTerm + lastTerm
-                + divideIntoTerms(number, secondTerm+1, lastTerm);
+        }else
+        if (secondTerm > number)
+            return divideIntoTerms(number, secondTerm - number
+                    , lastTerm + number + "+")
+                    + divideIntoTerms(number - 1, secondTerm + 1, lastTerm);
+        else return " = " + lastTerm + number + "+"
+                + secondTerm
+                + divideIntoTerms(secondTerm - 1, 1,
+                lastTerm + number + "+")
+                + divideIntoTerms(number - 1, secondTerm + 1, lastTerm);
 
     }
     public static void main(String[] args) {
-        System.out.println(asNumbersSum(7));
+        System.out.println(asNumbersSum(8));
     }
 }
