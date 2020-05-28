@@ -50,27 +50,26 @@ public class BiDirList<T> {
     private int cnt = 0;
 
     public void addLast(T item){
-        ListItem<T> li = new ListItem<T>(item);
+        ListItem<T> node = new ListItem<T>(item);
         if (head == null) {
-            head = li;
-            tail = li;
+            head = node;
         } else {
-            tail.setNext(li);
-            head.setPrev(tail);
-            tail = li;
+            tail.setNext(node);
+            node.setPrev(tail);
         }
+        tail = node;
         cnt++;
     }
 
     public void addFirst(T item) {
-        ListItem<T> li = new ListItem<T>(item);
-        if (head == null) {
-            head = li;
-            tail = li;
+        ListItem<T> node = new ListItem<T>(item);
+        ListItem<T> temp = head;
+        node.setNext(temp);
+        head = node;
+        if (cnt ==0) {
+            tail = head;
         } else {
-            head.setPrev(li);
-            tail.setNext(head);
-            head = li;
+            tail.setPrev(node);
         }
         cnt++;
     }
@@ -123,12 +122,11 @@ public class BiDirList<T> {
         return list;
     }
 
-
     public static<T> BiDirList<T> of(T...array) {
         return from(array);
     }
 
-    public T[] toArray(T[] array) {
+    public void toArray(T[] array) {
         int sizeOfList = size();
         if (array.length < sizeOfList) {
             array = (T[]) new Object[sizeOfList];
@@ -141,8 +139,8 @@ public class BiDirList<T> {
                 array[i] = elem.getItem();
             }
         }
-        return array;
     }
+
     public Iterator<T> getIterator() {
         return new Iterator<T>() {
             private ListItem<T> currentListItem = getHead();
@@ -166,7 +164,15 @@ public class BiDirList<T> {
     
 
     public static void main(String[] args) {
-        BiDirList<Integer> bd = BiDirList.from(new Integer[]{1,2,3,4,5});
-        System.out.println(bd.at(5));
+        BiDirList<Integer> list = new BiDirList<>();
+        for(int i=0; i<100; i++) {
+            list.addFirst(i);
+            list.addLast(i);
+        }
+        Iterator<Integer> iter = list.getIterator();
+        while (iter.hasNext()) {
+
+            System.out.println(iter.next());
+        }
     }
 }

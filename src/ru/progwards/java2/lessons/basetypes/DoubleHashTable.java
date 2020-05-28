@@ -168,6 +168,21 @@ public class DoubleHashTable<K extends HashValue,V>  {
     }
 
     public static void main(String[] args) {
+        DoubleHashTable<KeyInteger, Integer> intHashTable = new DoubleHashTable<>();
+        for(int i = 0; i < 101; i++) {
+            intHashTable.add(new KeyInteger(i), i);
+        }
+        intHashTable.add(new KeyInteger(101), 101);
+        intHashTable.remove(new KeyInteger(50));
+        intHashTable.change(new KeyInteger(45), new KeyInteger(55));
 
+        for(int i = 0; i < 199; i++) {
+            System.out.println(intHashTable.get(new KeyInteger(i)));
+        }
+
+        for(int i = 0; i < 199; i++) {
+            if(((DoubleHashTable.TableItem)intHashTable.table[i]) != null)
+                System.out.println(i + " " + ((DoubleHashTable.TableItem)intHashTable.table[i]).getItem());
+        }
     }
 }
