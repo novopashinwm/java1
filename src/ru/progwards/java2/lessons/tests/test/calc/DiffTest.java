@@ -1,5 +1,6 @@
 package ru.progwards.java2.lessons.tests.test.calc;
 
+import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -10,7 +11,7 @@ import java.util.Arrays;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-public class DiffTest {
+public class DiffTest extends TestCase {
     private int val1;
     private int val2;
     private int expected;

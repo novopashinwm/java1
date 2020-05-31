@@ -1,12 +1,12 @@
 package ru.progwards.java2.lessons.tests.test.calc;
 
-import org.junit.Assert;
+import junit.framework.TestCase;
 import org.junit.Test;
 import ru.progwards.java2.lessons.tests.calc.SimpleCalculator;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class DiffException {
+public class DiffException  {
 
     @Test(expected =  ArithmeticException.class)
     public void diffMax() {
