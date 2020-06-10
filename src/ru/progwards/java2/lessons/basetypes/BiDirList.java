@@ -171,7 +171,6 @@ public class BiDirList<T> {
         }
         Iterator<Integer> iter = list.getIterator();
         while (iter.hasNext()) {
-
             System.out.println(iter.next());
         }
     }
