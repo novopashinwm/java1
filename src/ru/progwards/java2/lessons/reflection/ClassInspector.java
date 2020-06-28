@@ -78,4 +78,40 @@ public class ClassInspector {
     public static void main(String[] args) {
         inspect(Person.class.getName());
     }
+
+    Person callConstructor(String name) {
+
+        Class<?> clazz = Person.class;
+        try {
+            Constructor<?> constructor = clazz.getDeclaredConstructor(String.class);
+            constructor.setAccessible(true);
+            return (Person)constructor.newInstance(name);
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    void setName(Person person, String name) {
+        Class clazz = person.getClass();
+        try {
+            Field field = clazz.getDeclaredField("name");
+            field.setAccessible(true);
+            field.set(person, name);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void callSetName(Person person, String name) {
+        Class<?> clazz = person.getClass();
+        try {
+            Method method = clazz.getDeclaredMethod("setName", String.class);
+            method.setAccessible(true);
+            method.invoke(person, (Object)name);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
 }
